@@ -1,0 +1,22 @@
+{
+  "name": "@rubys/ical",
+  "version": "0.0.1",
+  "license": "MIT",
+  "dependencies": {
+    "ical-generator": "^1.12.1",
+    "ical.js": "^1.4.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.4",
+    "jest": "^26.3.0"
+  },
+  "exports": {
+    "import": "./dist/calendar.mjs",
+    "require": "./dist/calendar.cjs"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "mkdir -p dist; cp calendar.js dist/calendar.mjs; babel calendar.js --out-file dist/calendar.cjs"
+  }
+}
