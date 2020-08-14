@@ -11,6 +11,7 @@ let seed = {
 
 function roundTrip(event) {
   let ical = calendar.serialize({ events: [event] });
+  if (event.status) console.log(ical);
   return calendar.parse(ical).events[0];
 }
 
@@ -45,6 +46,8 @@ test('basic event', () => {
     lastModified: '2020-02-20T12:00:00Z',
   }
 
+console.log(roundTrip(event));
+console.log(event);
   expect(roundTrip(event)).toEqual(event);
 });
 
