@@ -20,7 +20,9 @@ export function parse(ical) {
     for (let attr of vevent[1]) {
       let attrName = nameMap[attr[0]] || attr[0];
       let attrValue = attr[3];
-      if (typeof attrValue === 'string') attrValue = attrValue.replace(/\\./g, string => string[1].toLowerCase() === 'n' ? "\n" : string[1]);
+      if (typeof attr[2] === 'text' || (attr[1].fmttype || '').startsWith(('text/'))) {
+        attrValue = attrValue.replace(/\\./g, string => string[1].toLowerCase() === 'n' ? "\n" : string[1]);
+      }
 
       if (attrName === 'organizer') {
         event.organizer = person(attr);
@@ -28,7 +30,7 @@ export function parse(ical) {
         if (!event.attendees) event.attendees = [];
         event.attendees.push(person(attr));
       } else if (attrName === 'start') {
-        event.start = attr[3];
+        event.start = attrValue;
 
         if (attr[1].tzid) {
           event.timezone = attr[1].tzid;
@@ -40,9 +42,9 @@ export function parse(ical) {
       } else if (attrName === 'categories') {
         event.categories = attr.slice(3).map(name => ({ name }));
       } else if (['transparency', 'status', 'busystatus'].includes(attrName)) {
-        event[attrName] = attr[3].toLowerCase();
+        event[attrName] = attrValue.toLowerCase();
       } else if (['allDay', 'x-microsoft-msncalendar-alldayevent'].includes(attrName)) {
-        event.allDay = (attr[3] === 'TRUE');
+        event.allDay = (attrValue === 'TRUE');
       } else if (attrName === 'repeating') {
         event.repeating = {
           ...(event.repeating || {}),
@@ -56,7 +58,7 @@ export function parse(ical) {
         event.repeating.exclude.push(attr[3]);
         if (attr[1].tzid) event.repeating.excludeTimezone = attr[1].tzid;
       } else if (attrName === 'appleLocation' && attr[3].startsWith('geo:')) {
-        let [lat, lon] = attr[3].split(':')[1].split(',');
+        let [lat, lon] = attrValue.split(':')[1].split(',');
         event[attrName] = { geo: { lat, lon } };
         for (let [name, value] of Object.entries(attr[1])) {
           event[attrName][name.split('-').pop()] = value;
