@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "license": "MIT",
   "dependencies": {
-    "ical-generator": "^1.12.1",
+    "ical-generator": "^1.14.0",
     "ical.js": "^1.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
     "@babel/plugin-transform-modules-commonjs": "^7.10.4",
-    "jest": "^26.3.0"
+    "jest": "^26.4.0"
   },
   "exports": {
     "import": "./dist/calendar.mjs",

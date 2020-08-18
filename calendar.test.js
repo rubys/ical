@@ -44,7 +44,6 @@ test('basic event', () => {
     created: '2020-02-20T12:00:00Z',
     lastModified: '2020-02-20T12:00:00Z',
   }
-
   expect(roundTrip(event)).toEqual(event);
 });
 
@@ -77,13 +76,7 @@ test('floating event', () => {
 
 test('repeating event', () => {
   // notable ical-generator implementation details:
-  //  - byDay values are taken "asis", specifying "su" instead of "SU" will produce an invalid feed
-  //  - byDay (etc) values will become arrays, but ical.js flatten values to a string if there is only
-  //    one value.  It looks like ical-generator may modify the INPUT to make it an array.
-  //  - unless a TZ is specified, exclude times are evaluated in the local time zone, not in the
-  //    excludeTimezone.
-  //  - until values are normalized to milliseconds independently of how they are expressed -
-  //    again, it appears that ical-generator is modifying the INPUT to make it a date?
+  //  - exclude values are converted to UTC, but with a time zone indicator.
   let event = {
     ...seed,
     repeating: {
@@ -104,9 +97,7 @@ test('repeating event', () => {
     ...event,
     repeating: {
       ...event.repeating,
-      byDay: 'SU',
-      exclude: ["2013-12-25T02:00:00"],
-      until: "2014-01-01T00:00:00Z"
+      exclude: ["2013-12-25T02:00:00"]
     }
   });
 

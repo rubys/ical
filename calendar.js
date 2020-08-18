@@ -177,7 +177,7 @@ export function serialize({ calendar, events } = { calendar: {}, events: [] }) {
   let cal = icalgen(calendar);
 
   for (let event of events) {
-    let vevent = cal.createEvent({ ...event });
+    let vevent = cal.createEvent(event);
 
     for (let attr in event) {
       if (attr.startsWith('x-')) {
@@ -186,5 +186,5 @@ export function serialize({ calendar, events } = { calendar: {}, events: [] }) {
     }
   }
 
-  return cal.toString().replace(/^(UID:.*)@undefined/mg, (match, uid) => uid);
+  return cal.toString();
 }
